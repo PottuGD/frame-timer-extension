@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="frame_timer.css" />
+  </head>
+  <body>
+    <div id="popup-content">
+      <h1>Frame Timer</h1>
+
+      <div class="input-group">
+        <label for="startTime">Start Time:</label>
+        <div class="input-container">
+          <input type="text" id="startTime" placeholder="Enter start time" />
+          <button class="auto-btn" id="autoStartBtn">Auto</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="endTime">End Time:</label>
+        <div class="input-container">
+          <input type="text" id="endTime" placeholder="Enter end time" />
+          <button class="auto-btn" id="autoEndBtn">Auto</button>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="frameRate">Frame Rate:</label>
+        <div class="input-container">
+          <input type="text" id="frameRate" placeholder="Enter frame rate" />
+          <button class="auto-btn" id="autoFrameRateBtn">Auto</button>
+        </div>
+      </div>
+
+      <div id="errorContainer" class="hidden">
+        <p><strong>Error: </strong><span id="errorMessage"></span></p>
+      </div>
+
+      <button id="calculateBtn">Calculate</button>
+
+      <div id="output">
+        <p id="resultMessage">Your result will appear here...</p>
+        <button id="copyBtn" class="hidden">Copy Result</button>
+      </div>
+    </div>
+
+    <script src="frame_timer.js"></script>
+  </body>
+</html>
