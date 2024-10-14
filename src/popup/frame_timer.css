@@ -26,10 +26,21 @@ body {
   align-items: center;
 }
 
+.top-bar {
+  display: flex;
+  align-items: center;
+}
+
+.top-bar a {
+  margin: 0 7px;
+  color: #007acc;
+}
+
 h1 {
   text-align: center;
-  color: #ffffff;
-  margin-bottom: 20px;
+  color: #f5f5f5;
+  margin-bottom: 15px;
+  margin-top: 5px;
 }
 
 .input-group {
@@ -53,7 +64,7 @@ input {
   width: calc(100% - 50px);
   padding: 8px;
   background-color: #3b3b3b;
-  color: #ffffff;
+  color: #cccccc;
   border: none;
   border-radius: 4px;
   box-sizing: border-box;
@@ -63,7 +74,7 @@ button {
   height: 32px;
   padding: 0 7px;
   background-color: #007acc;
-  color: #ffffff;
+  color: #f5f5f5;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -89,7 +100,7 @@ button:hover {
   width: calc(100% - 50px);
   padding: 8px;
   background-color: #3b3b3b;
-  color: #ffffff;
+  color: #cccccc;
   border: none;
   border-radius: 4px;
   box-sizing: border-box;
