@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Frame Timer",
+  "version": "1.0",
+  "description": "Calculates the time between 2 frames in a YouTube video",
+  "homepage_url": "https://github.com/PottuGD/frame-timer-extension",
+  "icons": {
+    "48": "icons/logo-48.png"
+  },
+  "permissions": ["activeTab", "storage"],
+  "action": {
+    "default_icon": "icons/logo-48.png",
+    "default_title": "Frame Timer",
+    "default_popup": "popup/frame_timer.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content_script.js"]
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "frame-timer@extension"
+    }
+  }
+}
