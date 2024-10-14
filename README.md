@@ -21,6 +21,8 @@ Packaging documentation for [Firefox](https://extensionworkshop.com/documentatio
 
 For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and click on `Pack extension`. Then follow the on screen instructions
 
+**Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json)
+
 ## Credits
 
 Main `compute` function made by [@slashinfty](https://github.com/slashinfty/yt-frame-timer/blob/master/main.js#L1).
