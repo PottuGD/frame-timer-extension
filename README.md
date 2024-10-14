@@ -1,6 +1,8 @@
 # frame timer extension
 
-frame-timer-extension is a browser extension that allows you to quickly and accurately calculate the time between 2 frames in a YouTube video. This tool is made for retiming speedruns. The core function that calculates the times is made by [@slashinfty](https://github.com/slashinfty/yt-frame-timer)
+frame-timer-extension is a browser extension that allows you to quickly and accurately calculate the time between 2 frames in a YouTube video. This tool is made for retiming speedruns. The core function that calculates the times is made by [@slashinfty](https://github.com/slashinfty/yt-frame-timer).
+
+**This tool is still work in progress.** Please report any bugs [here](https://github.com/PottuGD/frame-timer-extension/issues).
 
 ## Documentation
 
@@ -21,7 +23,7 @@ Packaging documentation for [Firefox](https://extensionworkshop.com/documentatio
 
 For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and click on `Pack extension`. Then follow the on screen instructions
 
-**Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json)
+**Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json), depending on your browser you are packaging for.
 
 ## Credits
 
