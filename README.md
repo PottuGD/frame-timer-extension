@@ -6,7 +6,7 @@
 
 There are currently no prebuilt packages as this in still **work in progress**. However you can still install it as a [temporary addon](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) in firefox and [unpacked extension](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) in chrome. Alternatively you can package the extension and load it that way (see [#Building](#building)).
 
-**There will be bugs in this extension** as said earlier it is very much work in progress
+**There will be bugs in this extension** as said earlier it is work in progress
 
 ## Contributing
 
@@ -25,10 +25,6 @@ Please make sure to update any relevant documentation and follow the coding styl
 Packaging documentation for [Firefox](https://extensionworkshop.com/documentation/publish/package-your-extension/)
 
 For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and click on `Pack extension`. Then follow the on screen instructions
-
-## TODO:
-
-- Make auto set work in Chrome
 
 ## Credits
 
