@@ -1,3 +1,13 @@
+// Function to show and resize the text area
+function autoResize(textarea) {
+  textarea.classList.remove("hidden"); // Make the text area visible
+
+  textarea.offsetHeight; // Trigger a reflow
+
+  textarea.style.height = "auto"; // Reset height to auto to shrink first
+  textarea.style.height = textarea.scrollHeight + "px"; // Adjust height to fit content
+}
+
 // Helper function to save the popup state
 function savePopupState() {
   const startTime = document.getElementById("startTime").value;
@@ -27,6 +37,8 @@ function loadPopupState() {
     }
     if (result.frameRate) {
       document.getElementById("frameRate").value = result.frameRate;
+    } else {
+      document.getElementById("frameRate").value = 60;
     }
     console.log("Popup state loaded.");
   });
@@ -62,7 +74,11 @@ function requestFPS() {
         document.getElementById("frameRate").value = response.fps;
         savePopupState(); // Save the state after updating the input
       } else {
-        console.error("FPS could not be retrieved.");
+        console.log("FPS could not be retrieved.");
+        showError(
+          document.getElementById("autoFrameRateBtn"),
+          'Could not retrieve FPS. Did you click on "Stats For Nerds"?'
+        );
       }
     });
   });
@@ -131,6 +147,12 @@ function checkValues() {
 
 // Function to calculate and format the mod message
 function compute(frameRate, startTime, endTime) {
+  /*
+   * Credits:
+   * This function was originally created by slashinifty (https://github.com/slashinfty/yt-frame-timer),
+   * but was modified for the needs of this project.
+   */
+
   // Ensure that values are valid
   if (!checkValues()) {
     return;
@@ -174,6 +196,9 @@ function compute(frameRate, startTime, endTime) {
   document.getElementById("resultMessage").textContent = modMessage + credits;
   document.getElementById("output").classList.remove("hidden");
   document.getElementById("copyBtn").classList.remove("hidden");
+
+  // Auto resize the text area
+  autoResize(document.getElementById("resultMessage"));
 }
 
 // Event listeners for the buttons

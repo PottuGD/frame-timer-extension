@@ -60,26 +60,21 @@ input {
 }
 
 button {
-  padding: 10px;
+  height: 32px;
+  padding: 0 7px;
   background-color: #007acc;
   color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   margin-left: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 button:hover {
-  background-color: #005f99;
-}
-
-.auto-btn {
-  width: 40px;
-  padding: 8px;
-  background-color: #007acc;
-}
-
-.auto-btn:hover {
   background-color: #005f99;
 }
 
@@ -90,19 +85,31 @@ button:hover {
 }
 
 #resultMessage {
-  margin-top: 10px;
   font-size: 14px;
-}
-
-.hidden {
-  display: none;
+  width: calc(100% - 50px);
+  padding: 8px;
+  background-color: #3b3b3b;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: none;
+  overflow: hidden;
+  width: 100%;
+  max-height: 200px;
+  min-height: 50px;
 }
 
 #copyBtn {
   margin-top: 10px;
   background-color: #007acc;
+  display: inline-block;
 }
 
 #errorContainer {
   color: #f73d3d;
+}
+
+.hidden {
+  display: none !important;
 }

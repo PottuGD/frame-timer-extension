@@ -39,7 +39,13 @@
       <button id="calculateBtn">Calculate</button>
 
       <div id="output">
-        <p id="resultMessage">Your result will appear here...</p>
+        <textarea
+          id="resultMessage"
+          class="hidden"
+          readonly
+          onclick="this.select();"
+        ></textarea>
+
         <button id="copyBtn" class="hidden">Copy Result</button>
       </div>
     </div>
