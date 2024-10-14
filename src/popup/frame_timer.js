@@ -160,7 +160,7 @@ function checkValues() {
 function compute(frameRate, startTime, endTime) {
   /*
    * Credits:
-   * This function was originally created by slashinifty (https://github.com/slashinfty/yt-frame-timer),
+   * This function was originally created by slashinfty (https://github.com/slashinfty/yt-frame-timer),
    * but was modified for the needs of this project.
    */
 
