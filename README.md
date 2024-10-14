@@ -4,7 +4,7 @@
 
 ## Install
 
-There are currently no prebuilt packages as this in still **work in progress**. However you can still install it as a [temporary addon](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) in firefox and [unpacked extension](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) in chrome. Alternatively you can package the extension and load it that way (see [#Building](#building)).
+There are currently **no prebuilt packages** as this project is **still work in progress**. However you can still install it as a [temporary addon](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) in firefox and as an [unpacked extension](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) in chrome. Alternatively you can package the extension and load it that way (see [#Building](https://github.com/PottuGD/frame-timer-extension#building)).
 
 **There will be bugs in this extension** as said earlier it is work in progress
 
