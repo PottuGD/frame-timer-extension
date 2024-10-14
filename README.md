@@ -29,3 +29,7 @@ For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and
 ## TODO:
 
 - Make auto set work in Chrome
+
+## Credits
+
+[yt-frame-timer](https://slashinfty.github.io/yt-frame-timer/) by [@slashinfty](https://github.com/slashinfty)
