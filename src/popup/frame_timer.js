@@ -60,6 +60,17 @@ function requestCurrentTime(isStartTime) {
           savePopupState(); // Save the state after updating the input
         } else {
           console.error("Current time could not be retrieved.");
+          if (isStartTime) {
+            showError(
+              document.getElementById("autoStartBtn"),
+              "Could not retrieve current time."
+            );
+          } else {
+            showError(
+              document.getElementById("autoEndBtn"),
+              "Could not retrieve current time."
+            );
+          }
         }
       }
     );
@@ -186,12 +197,9 @@ function compute(frameRate, startTime, endTime) {
     3
   )}s and ends at ${endTime.toFixed(
     3
-  )}s at ${frameRate} fps to get a final time of ${finalTime}.`;
+  )}s at ${frameRate} fps to get a final time of ${finalTime}. `;
   let credits =
     "Retimed using [frame-timer-extension](https://github.com/PottuGD/frame-timer-extension)";
-
-  console.log("time: ", finalTime);
-  console.log(`mod message: ${modMessage} ${credits}`);
 
   document.getElementById("resultMessage").textContent = modMessage + credits;
   document.getElementById("output").classList.remove("hidden");
