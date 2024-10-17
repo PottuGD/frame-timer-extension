@@ -158,50 +158,45 @@ function checkValues() {
 
 // Function to calculate and format the mod message
 function compute(frameRate, startTime, endTime) {
-  /*
-   * Credits:
-   * This function was originally created by slashinfty (https://github.com/slashinfty/yt-frame-timer),
-   * but was modified for the needs of this project.
-   */
-
   // Ensure that values are valid
   if (!checkValues()) {
     return;
   }
 
-  // Calculate total frames
-  let totalFrames = (endTime - startTime) * frameRate;
+  // Round to the nearest frame
+  const startFrame = Math.floor(startTime * frameRate) / frameRate;
+  const endFrame = Math.floor(endTime * frameRate) / frameRate;
 
-  // Calculate seconds, minutes, and hours
-  let totalSeconds = Math.floor(totalFrames / frameRate);
-  let milliseconds = Math.round((totalFrames % frameRate) * (1000 / frameRate));
+  // Convert startTime and endTime to milliseconds
+  const startMillis = startFrame * 1000;
+  const endMillis = endFrame * 1000;
 
-  let hours = Math.floor(totalSeconds / 3600);
-  totalSeconds %= 3600;
-  let minutes = Math.floor(totalSeconds / 60);
-  seconds = totalSeconds % 60;
+  // Calculate the time difference in milliseconds
+  const timeDifference = endMillis - startMillis;
 
-  // Format time values
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-  milliseconds =
-    milliseconds < 10
-      ? "00" + milliseconds
-      : milliseconds < 100
-      ? "0" + milliseconds
-      : milliseconds;
+  // Extract hours, minutes, seconds, and milliseconds
+  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+  const milliseconds = Math.floor(timeDifference % 1000); // Round milliseconds to avoid precision errors
 
-  // Show the mod message
-  let finalTime = `${hours}h ${minutes}m ${seconds}s ${milliseconds}ms`;
-  let modMessage = `Mod Message: Time starts at ${startTime.toFixed(
-    3
-  )}s and ends at ${endTime.toFixed(
-    3
-  )}s at ${frameRate} fps to get a final time of ${finalTime}. `;
-  let credits =
+  // Format startTime and endTime in seconds with 3 decimal places
+  const formattedStart = startTime.toFixed(3);
+  const formattedEnd = endTime.toFixed(3);
+
+  // Format the time difference as "0h 00m 01s 000ms"
+  const finalTime = `${hours}h ${minutes.toString().padStart(2, "0")}m ${seconds
+    .toString()
+    .padStart(2, "0")}s ${milliseconds.toString().padStart(3, "0")}ms`;
+
+  // Set the mod message
+  const modMessage = `Time starts at ${formattedStart}s and ends at ${formattedEnd}s to get a final time of ${finalTime}.`;
+  const credits =
     "Retimed using [frame-timer-extension](https://github.com/PottuGD/frame-timer-extension)";
 
-  document.getElementById("resultMessage").textContent = modMessage + credits;
+  // Update the DOM elements
+  document.getElementById("resultMessage").textContent =
+    modMessage + " " + credits;
   document.getElementById("output").classList.remove("hidden");
   document.getElementById("copyBtn").classList.remove("hidden");
 
