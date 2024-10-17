@@ -23,6 +23,15 @@ function getCurrentTime() {
   return player ? player.currentTime : null;
 }
 
+function stepFrames(frames) {
+  const player = document.getElementsByTagName("video")[0];
+
+  fps = 60; // TODO: Set automatically
+  player.currentTime = player.currentTime + frames / fps;
+
+  return;
+}
+
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "getFPS") {
@@ -33,5 +42,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "getCurrentTime") {
     const currentTime = getCurrentTime();
     sendResponse({ currentTime });
+  }
+
+  if (message.action === "stepFrames") {
+    const frames = message.frames;
+    stepFrames(frames);
   }
 });
