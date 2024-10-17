@@ -253,5 +253,42 @@ document.getElementById("copyBtn").addEventListener("click", function () {
       console.error("Could not copy text: ", err);
     });
 });
+
+document.getElementById("+1frame").addEventListener("click", () => {
+  const frames = 1;
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs[0];
+
+    chrome.tabs.sendMessage(activeTab.id, {
+      action: "stepFrames",
+      frames: frames,
+    });
+  });
+});
+
+document.getElementById("-1frame").addEventListener("click", () => {
+  const frames = -1;
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const activeTab = tabs[0];
+
+    chrome.tabs.sendMessage(activeTab.id, {
+      action: "stepFrames",
+      frames: frames,
+    });
+  });
+});
+
+// Save the popup state when input fields change
+const inputs = document.querySelectorAll("input"); // Selects all input elements
+
+// Loop through all input elements and add an event listener
+inputs.forEach((input) => {
+  input.addEventListener("input", function () {
+    savePopupState();
+  });
+});
+
 // Load the saved popup state when the popup is opened
 document.addEventListener("DOMContentLoaded", loadPopupState);
