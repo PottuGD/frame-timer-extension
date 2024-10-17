@@ -27,5 +27,4 @@ For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and
 
 ## Credits
 
-Main `compute` function made by [@slashinfty](https://github.com/slashinfty/yt-frame-timer/blob/master/main.js#L1).
-This function was modified to fit this projects needs.
+The original [yt-frame-timer](https://github.com/slashinfty/yt-frame-timer/) made by [@slashinfty](https://github.com/slashinfty/)
