@@ -156,41 +156,54 @@ function checkValues() {
   return true;
 }
 
-// Function to calculate and format the mod message
-function compute(frameRate, startTime, endTime) {
+function compute(frameRate, startFrame, endFrame) {
   // Ensure that values are valid
   if (!checkValues()) {
     return;
   }
 
-  // Round to the nearest frame
-  const startFrame = Math.floor(startTime * frameRate) / frameRate;
-  const endFrame = Math.floor(endTime * frameRate) / frameRate;
+  // Initiate basic time variables
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
+  let milliseconds = 0;
 
-  // Convert startTime and endTime to milliseconds
-  const startMillis = startFrame * 1000;
-  const endMillis = endFrame * 1000;
-
-  // Calculate the time difference in milliseconds
-  const timeDifference = endMillis - startMillis;
-
-  // Extract hours, minutes, seconds, and milliseconds
-  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-  const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-  const milliseconds = Math.floor(timeDifference % 1000); // Round milliseconds to avoid precision errors
-
-  // Format startTime and endTime in seconds with 3 decimal places
-  const formattedStart = startTime.toFixed(3);
-  const formattedEnd = endTime.toFixed(3);
-
-  // Format the time difference as "0h 00m 01s 000ms"
-  const finalTime = `${hours}h ${minutes.toString().padStart(2, "0")}m ${seconds
-    .toString()
-    .padStart(2, "0")}s ${milliseconds.toString().padStart(3, "0")}ms`;
+  // Calculate framerate
+  let frames = (endFrame - startFrame) * frameRate;
+  seconds = Math.floor(frames / frameRate);
+  frames = frames % frameRate;
+  milliseconds = Math.round((frames / frameRate) * 1000);
+  if (milliseconds < 10) {
+    milliseconds = "00" + milliseconds;
+  } else if (milliseconds < 100) {
+    milliseconds = "0" + milliseconds;
+  }
+  if (seconds >= 60) {
+    minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+  }
+  if (minutes >= 60) {
+    hours = Math.floor(minutes / 60);
+    minutes = minutes % 60;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+  }
 
   // Set the mod message
-  const modMessage = `Time starts at ${formattedStart}s and ends at ${formattedEnd}s to get a final time of ${finalTime}.`;
+  const finalTime =
+    hours.toString() +
+    "h " +
+    minutes.toString() +
+    "m " +
+    seconds.toString() +
+    "s " +
+    milliseconds.toString() +
+    "ms";
+  const modMessage = `Mod Message: Time starts at ${parseFloat(
+    startFrame
+  ).toFixed(3)} and ends at ${parseFloat(endFrame).toFixed(
+    3
+  )} at ${frameRate} fps to get a final time of ${finalTime}.`;
   const credits =
     "Retimed using [frame-timer-extension](https://github.com/PottuGD/frame-timer-extension)";
 
@@ -240,6 +253,5 @@ document.getElementById("copyBtn").addEventListener("click", function () {
       console.error("Could not copy text: ", err);
     });
 });
-
 // Load the saved popup state when the popup is opened
 document.addEventListener("DOMContentLoaded", loadPopupState);
