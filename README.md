@@ -10,10 +10,10 @@ The documentation for this project can be found [here](https://github.com/PottuG
 It includes:
 
 - [Getting Started](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Installation](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Usage Guide](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Contributing](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Credits](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
+- [Installation](https://github.com/PottuGD/frame-timer-extension/wiki/Installation-guide)
+- [Usage Guide](https://github.com/PottuGD/frame-timer-extension/wiki/Usage-guide)
+- [Contributing](https://github.com/PottuGD/frame-timer-extension/wiki/Contributing)
+- [Credits](https://github.com/PottuGD/frame-timer-extension/wiki/Credits)
 
 ## Building
 
@@ -21,7 +21,7 @@ To package the extension from source:
 
 Packaging documentation for [Firefox](https://extensionworkshop.com/documentation/publish/package-your-extension/)
 
-For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and click on `Pack extension`. Then follow the on screen instructions
+For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extension`. Then follow the on screen instructions.
 
 **Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json), depending on your browser you are packaging for.
 
