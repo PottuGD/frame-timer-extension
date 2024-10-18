@@ -21,7 +21,7 @@ To package the extension from source:
 
 Packaging documentation for [Firefox](https://extensionworkshop.com/documentation/publish/package-your-extension/)
 
-For Chrome you'll have to go to [chrome://extensions/](chrome://extensions/) and click on `Pack extension`. Then follow the on screen instructions
+For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extension`. Then follow the on screen instructions.
 
 **Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json), depending on your browser you are packaging for.
 
