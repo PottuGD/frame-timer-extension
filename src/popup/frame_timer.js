@@ -13,12 +13,14 @@ function savePopupState() {
   const startTime = document.getElementById("startTime").value;
   const endTime = document.getElementById("endTime").value;
   const frameRate = document.getElementById("frameRate").value;
+  const stepFramesValue = document.getElementById("stepFramesValue").value;
 
   chrome.storage.local.set(
     {
       startTime,
       endTime,
       frameRate,
+      stepFramesValue,
     },
     () => {
       console.log("Popup state saved.");
@@ -28,20 +30,27 @@ function savePopupState() {
 
 // Helper function to load the popup state
 function loadPopupState() {
-  chrome.storage.local.get(["startTime", "endTime", "frameRate"], (result) => {
-    if (result.startTime) {
-      document.getElementById("startTime").value = result.startTime;
+  chrome.storage.local.get(
+    ["startTime", "endTime", "frameRate", "stepFramesValue"],
+    (result) => {
+      if (result.startTime) {
+        document.getElementById("startTime").value = result.startTime;
+      }
+      if (result.endTime) {
+        document.getElementById("endTime").value = result.endTime;
+      }
+      if (result.frameRate) {
+        document.getElementById("frameRate").value = result.frameRate;
+      } else {
+        document.getElementById("frameRate").value = 60;
+      }
+      if (result.stepFramesValue) {
+        document.getElementById("stepFramesValue").value =
+          result.stepFramesValue;
+      }
+      console.log("Popup state loaded.");
     }
-    if (result.endTime) {
-      document.getElementById("endTime").value = result.endTime;
-    }
-    if (result.frameRate) {
-      document.getElementById("frameRate").value = result.frameRate;
-    } else {
-      document.getElementById("frameRate").value = 60;
-    }
-    console.log("Popup state loaded.");
-  });
+  );
 }
 
 // Function to request current time from the content script
@@ -78,19 +87,42 @@ function requestCurrentTime(isStartTime) {
 }
 
 // Function to request FPS from the content script
-function requestFPS() {
+function requestFPS(isStepFrames = false, shouldSave = true) {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { action: "getFPS" }, (response) => {
+        if (response && response.fps) {
+          document.getElementById("frameRate").value = response.fps;
+
+          shouldSave && savePopupState(); // Save only if shouldSave is true
+          resolve(response.fps);
+        } else {
+          console.log("FPS could not be retrieved.");
+          if (!isStepFrames) {
+            showError(
+              document.getElementById("autoFrameRateBtn"),
+              'Could not retrieve FPS. Did you click on "Stats For Nerds"?'
+            );
+          } else {
+            showError(
+              document.getElementById("stepFramesValue"),
+              'Could not retrieve FPS. Did you click on "Stats For Nerds"?'
+            );
+          }
+          reject(new Error("Could not retrieve FPS."));
+        }
+      });
+    });
+  });
+}
+
+// Function to request stepping forward in the video from the content script
+function requestStepFrames(frames, fps) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "getFPS" }, (response) => {
-      if (response && response.fps) {
-        document.getElementById("frameRate").value = response.fps;
-        savePopupState(); // Save the state after updating the input
-      } else {
-        console.log("FPS could not be retrieved.");
-        showError(
-          document.getElementById("autoFrameRateBtn"),
-          'Could not retrieve FPS. Did you click on "Stats For Nerds"?'
-        );
-      }
+    chrome.tabs.sendMessage(tabs[0].id, {
+      action: "stepFrames",
+      frames: frames,
+      fps: fps,
     });
   });
 }
@@ -254,29 +286,19 @@ document.getElementById("copyBtn").addEventListener("click", function () {
     });
 });
 
-document.getElementById("+1frame").addEventListener("click", () => {
-  const frames = 1;
-
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const activeTab = tabs[0];
-
-    chrome.tabs.sendMessage(activeTab.id, {
-      action: "stepFrames",
-      frames: frames,
-    });
+document.getElementById("backwardsButton").addEventListener("click", () => {
+  requestFPS(true).then((fps) => {
+    const frames = document.getElementById("stepFramesValue").value;
+    const negativeFrames = -frames;
+    requestStepFrames(negativeFrames, fps);
   });
 });
 
-document.getElementById("-1frame").addEventListener("click", () => {
-  const frames = -1;
-
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const activeTab = tabs[0];
-
-    chrome.tabs.sendMessage(activeTab.id, {
-      action: "stepFrames",
-      frames: frames,
-    });
+document.getElementById("forwardsButton").addEventListener("click", () => {
+  requestFPS(true).then((fps) => {
+    const frames = document.getElementById("stepFramesValue").value;
+    console.log(`frames: ${frames}`);
+    requestStepFrames(frames, fps);
   });
 });
 
