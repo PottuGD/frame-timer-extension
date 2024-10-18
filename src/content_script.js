@@ -23,12 +23,9 @@ function getCurrentTime() {
   return player ? player.currentTime : null;
 }
 
-function stepFrames(frames) {
+function stepFrames(frames, fps) {
   const player = document.getElementsByTagName("video")[0];
-
-  fps = 60; // TODO: Set automatically
   player.currentTime = player.currentTime + frames / fps;
-
   return;
 }
 
@@ -46,6 +43,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.action === "stepFrames") {
     const frames = message.frames;
-    stepFrames(frames);
+    const fps = message.fps;
+    stepFrames(frames, fps);
   }
 });
