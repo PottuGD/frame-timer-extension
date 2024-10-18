@@ -14,9 +14,22 @@
       </div>
       <h1>Frame Timer</h1>
 
-      <div class="input-container">
-        <button id="+1frame">+1 frame</button>
-        <button id="-1frame">-1 frame</button>
+      <div class="button-container">
+        <button class="stepFramesBtn" id="backwardsButton">
+          <span class="minus-sign">-</span>
+        </button>
+
+        <input
+          type="number"
+          class="step-frames-value"
+          id="stepFramesValue"
+          value="1"
+          min="1"
+        />
+
+        <button class="stepFramesBtn" id="forwardsButton">
+          <span class="plus-sign">+</span>
+        </button>
       </div>
 
       <div class="input-group">

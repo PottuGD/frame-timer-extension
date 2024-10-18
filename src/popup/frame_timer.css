@@ -55,6 +55,7 @@ label {
   color: #cccccc;
 }
 
+.button-container,
 .input-container {
   display: flex;
   align-items: center;
@@ -87,6 +88,37 @@ button {
 
 button:hover {
   background-color: #005f99;
+}
+
+.stepFramesBtn {
+  height: 25px;
+  width: 30px;
+  background-color: #007acc;
+  margin: 10px;
+}
+
+.minus-sign,
+.plus-sign {
+  font-size: 20px;
+}
+
+.step-frames-value {
+  width: 40px;
+  height: 25px;
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.step-frames-value::-webkit-outer-spin-button,
+.step-frames-value::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.step-frames-value {
+  appearance: none;
+  -moz-appearance: textfield; /* Hide arrows in Firefox */
 }
 
 #output {
