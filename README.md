@@ -10,10 +10,10 @@ The documentation for this project can be found [here](https://github.com/PottuG
 It includes:
 
 - [Getting Started](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Installation](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Usage Guide](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Contributing](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
-- [Credits](https://github.com/PottuGD/frame-timer-extension/wiki/Getting-started)
+- [Installation](https://github.com/PottuGD/frame-timer-extension/wiki/Installation-guide)
+- [Usage Guide](https://github.com/PottuGD/frame-timer-extension/wiki/Usage-guide)
+- [Contributing](https://github.com/PottuGD/frame-timer-extension/wiki/Contributing)
+- [Credits](https://github.com/PottuGD/frame-timer-extension/wiki/Credits)
 
 ## Building
 
