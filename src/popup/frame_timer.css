@@ -97,9 +97,9 @@ button:hover {
   margin: 10px;
 }
 
-.minus-sign,
-.plus-sign {
-  font-size: 20px;
+.backwards-sign,
+.forwards-sign {
+  font-size: 13px;
 }
 
 .step-frames-value {
