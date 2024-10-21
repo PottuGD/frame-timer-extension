@@ -2,7 +2,7 @@
 
 frame-timer-extension is a browser extension that allows you to quickly and accurately calculate the time between 2 frames in a YouTube video. This tool is made for retiming speedruns. The core function that calculates the times is made by [@slashinfty](https://github.com/slashinfty/yt-frame-timer).
 
-**This tool is still work in progress.** Please report any bugs [here](https://github.com/PottuGD/frame-timer-extension/issues).
+**Please report any bugs [here](https://github.com/PottuGD/frame-timer-extension/issues).**
 
 ## Installation
 
