@@ -31,6 +31,13 @@ For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extens
 
 **Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json), depending on your browser you are packaging for.
 
+## TODO:
+
+- [ ] Implement caching (at least for `requestFPS()`)
+- [ ] Save the inputs' state only when input is complete, rather than on every change.
+- [ ] Make an `error` css class to clean up `showError()`
+- [ ] Clean up `loadPopupState()`
+
 ## Credits
 
 The original [yt-frame-timer](https://github.com/slashinfty/yt-frame-timer/) made by [@slashinfty](https://github.com/slashinfty/)
