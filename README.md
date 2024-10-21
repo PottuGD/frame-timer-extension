@@ -4,6 +4,12 @@ frame-timer-extension is a browser extension that allows you to quickly and accu
 
 **This tool is still work in progress.** Please report any bugs [here](https://github.com/PottuGD/frame-timer-extension/issues).
 
+## Installation
+
+The extension can be downloaded for Firefox from the official [Firefox Add-Ons Store](https://addons.mozilla.org/en-US/firefox/addon/frame-timer-extension/).
+
+Chrome users, please check the [installation guide](https://github.com/PottuGD/frame-timer-extension/wiki/Installation-guide).
+
 ## Documentation
 
 The documentation for this project can be found [here](https://github.com/PottuGD/frame-timer-extension/wiki).
