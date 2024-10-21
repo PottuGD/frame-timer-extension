@@ -68,7 +68,9 @@ function requestCurrentTime(isStartTime) {
           }
           savePopupState(); // Save the state after updating the input
         } else {
-          console.error("Current time could not be retrieved.");
+          console.error(
+            "Current time could not be retrieved. Try restarting your browser."
+          );
           if (isStartTime) {
             showError(
               document.getElementById("autoStartBtn"),
