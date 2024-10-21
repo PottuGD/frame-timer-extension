@@ -188,6 +188,7 @@ function checkValues() {
   return true;
 }
 
+// Function to compute the times
 function compute(frameRate, startFrame, endFrame) {
   // Ensure that values are valid
   if (!checkValues()) {
@@ -249,6 +250,15 @@ function compute(frameRate, startFrame, endFrame) {
   autoResize(document.getElementById("resultMessage"));
 }
 
+// Function to round the time values to the nearest frame to improve accuracy
+function roundToFrame(targetFrame, frameRate) {
+  // Calculate the frame
+  let frameFromObj = (time, fps) => Math.floor(time * fps) / fps; //round to the nearest frame
+  let finalFrame = frameFromObj(targetFrame, frameRate);
+
+  return finalFrame;
+}
+
 // Event listeners for the buttons
 document.getElementById("autoStartBtn").addEventListener("click", function () {
   requestCurrentTime(true);
@@ -265,12 +275,26 @@ document
   });
 
 document.getElementById("calculateBtn").addEventListener("click", function () {
-  // Perform calculation logic
-  const startTime = parseFloat(document.getElementById("startTime").value);
-  const endTime = parseFloat(document.getElementById("endTime").value);
-  const frameRate = parseFloat(document.getElementById("frameRate").value);
+  // Get the input elements
+  const startTimeInput = document.getElementById("startTime");
+  const endTimeInput = document.getElementById("endTime");
+  const frameRateInput = document.getElementById("frameRate");
 
-  compute(frameRate, startTime, endTime);
+  // Get the values of the input elements
+  const startTime = parseFloat(startTimeInput.value);
+  const endTime = parseFloat(endTimeInput.value);
+  const frameRate = parseInt(frameRateInput.value);
+
+  // Round the value to the nearest frame
+  const startFrame = roundToFrame(startTime, frameRate, startTimeInput);
+  const endFrame = roundToFrame(endTime, frameRate, endTimeInput);
+
+  // Update DOM
+  startTimeInput.value = startFrame;
+  endTimeInput.value = endFrame;
+
+  // Compute the final time
+  compute(frameRate, startFrame, endFrame);
   savePopupState(); // Save the state after calculation
 });
 
