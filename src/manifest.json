@@ -5,7 +5,8 @@
   "description": "Calculates the time between 2 frames in a YouTube video",
   "homepage_url": "https://github.com/PottuGD/frame-timer-extension",
   "icons": {
-    "48": "icons/logo-48.png"
+    "48": "icons/logo-48.png",
+    "96": "icons/logo-96.png"
   },
   "permissions": ["activeTab", "storage"],
   "action": {
