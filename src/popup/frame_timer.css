@@ -131,6 +131,7 @@ button:hover {
   border-radius: 4px;
   box-sizing: border-box;
   resize: none;
+  width: 100%;
   max-height: 200px;
   min-height: 50px;
 }
@@ -146,4 +147,8 @@ button:hover {
 
 .hidden {
   display: none !important;
+}
+
+.error {
+  border: 2px solid #f73d3d !important;
 }
