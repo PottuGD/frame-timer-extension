@@ -7,6 +7,7 @@ body {
   width: 400px;
   max-height: 600px;
   font-family: "Noto Sans", sans-serif;
+  font-size: 16px;
   margin: 0;
   padding: 0;
   display: flex;
@@ -37,10 +38,9 @@ body {
 }
 
 h1 {
+  font-size: 34px;
   text-align: center;
-  color: #f5f5f5;
-  margin-bottom: 15px;
-  margin-top: 5px;
+  margin: 5px 0 15px;
 }
 
 .input-group {
@@ -55,7 +55,6 @@ label {
   color: #cccccc;
 }
 
-.button-container,
 .input-container {
   display: flex;
   align-items: center;
@@ -80,7 +79,6 @@ button {
   border-radius: 4px;
   cursor: pointer;
   margin-left: 10px;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,26 +97,23 @@ button:hover {
 
 .backwards-sign,
 .forwards-sign {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .step-frames-value {
+  font-size: 15px;
   width: 40px;
   height: 25px;
   text-align: center;
-  outline: none;
   box-sizing: border-box;
+  appearance: none;
+  -moz-appearance: textfield;
 }
 
 .step-frames-value::-webkit-outer-spin-button,
 .step-frames-value::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.step-frames-value {
-  appearance: none;
-  -moz-appearance: textfield; /* Hide arrows in Firefox */
 }
 
 #output {
@@ -129,7 +124,6 @@ button:hover {
 
 #resultMessage {
   font-size: 14px;
-  width: calc(100% - 50px);
   padding: 8px;
   background-color: #3b3b3b;
   color: #cccccc;
@@ -137,8 +131,6 @@ button:hover {
   border-radius: 4px;
   box-sizing: border-box;
   resize: none;
-  overflow: hidden;
-  width: 100%;
   max-height: 200px;
   min-height: 50px;
 }
@@ -146,7 +138,6 @@ button:hover {
 #copyBtn {
   margin-top: 10px;
   background-color: #007acc;
-  display: inline-block;
 }
 
 #errorContainer {
