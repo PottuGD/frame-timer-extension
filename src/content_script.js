@@ -1,10 +1,22 @@
 function getFPS() {
-  const divs = document.querySelectorAll("div");
+  // Select the container div with the specified class
+  const container = document.querySelector(
+    ".html5-video-info-panel-content.ytp-sfn-content"
+  );
+
+  // Ensure the container exists before proceeding
+  if (!container) {
+    return null;
+  }
+
+  // Select all divs within the container
+  const divs = container.querySelectorAll("div");
   let resDiv = null;
 
   divs.forEach((div) => {
     if (div.textContent.includes("Current / Optimal Res")) {
       resDiv = div;
+      console.log("Found resDiv");
     }
   });
 
