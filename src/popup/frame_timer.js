@@ -33,22 +33,27 @@ function loadPopupState() {
   chrome.storage.local.get(
     ["startTime", "endTime", "frameRate", "stepFramesValue"],
     (result) => {
-      if (result.startTime) {
-        document.getElementById("startTime").value = result.startTime;
-      }
-      if (result.endTime) {
-        document.getElementById("endTime").value = result.endTime;
-      }
-      if (result.frameRate) {
-        document.getElementById("frameRate").value = result.frameRate;
-      } else {
-        document.getElementById("frameRate").value = 60;
-      }
-      if (result.stepFramesValue) {
-        document.getElementById("stepFramesValue").value =
-          result.stepFramesValue;
-      }
-      console.log("Popup state loaded.");
+      // Helper function to set the element value or a default value
+      const setValue = (key, elementId, defaultValue) => {
+        // Check if the value is valid
+        let value;
+        if (result[key] === undefined || result[key] === "") {
+          // Value is not valid, set it to the default value
+          value = defaultValue;
+        } else {
+          // Value is valid
+          value = result[key];
+        }
+        console.log(key, ": ", value);
+        // Update the DOM
+        document.getElementById(elementId).value = value;
+      };
+
+      // Set the values
+      setValue("startTime", "startTime", "");
+      setValue("endTime", "endTime", "");
+      setValue("frameRate", "frameRate", 60);
+      setValue("stepFramesValue", "stepFramesValue", "");
     }
   );
 }
@@ -62,11 +67,16 @@ function requestCurrentTime(isStartTime) {
       (response) => {
         if (response && response.currentTime !== null) {
           if (isStartTime) {
-            document.getElementById("startTime").value = response.currentTime;
+            // Round the response value to the nearest frame
+            const startTime = document.getElementById("startTime");
+            startTime.value = parseTime(response.currentTime);
           } else {
-            document.getElementById("endTime").value = response.currentTime;
+            // Round the response value to the nearest frame
+            const endTime = document.getElementById("endTime");
+            endTime.value = parseTime(response.currentTime);
           }
-          savePopupState(); // Save the state after updating the input
+          // Save the popup state
+          savePopupState();
         } else {
           console.error(
             "Current time could not be retrieved. Try restarting your browser."
@@ -179,10 +189,10 @@ function checkValues() {
   const endFrame = parseTime(endTimeInput.value);
 
   // Update DOM
-  if (startFrame !== null) {
+  if (!(startFrame == null || isNaN(startFrame))) {
     startTimeInput.value = startFrame;
   }
-  if (endFrame !== null) {
+  if (!(endFrame == null || isNaN(endFrame))) {
     endTimeInput.value = endFrame;
   }
 
@@ -309,9 +319,14 @@ function parseTime(targetFrame) {
   const frameRate = document.getElementById("frameRate").value;
 
   // Parse the debug info JSON from the input element
-  const frameFromInputText = JSON.parse(targetFrame).lct;
+  let frameFromInputText;
+  try {
+    frameFromInputText = JSON.parse(targetFrame).lct;
+  } catch {
+    return roundToFrame(targetFrame, frameRate);
+  }
 
-  // Check if the value is a JSON or not
+  // Check if the value is a valid
   if (typeof frameFromInputText !== "undefined") {
     // Use the time from the JSON
     return roundToFrame(frameFromInputText, frameRate);
