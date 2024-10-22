@@ -44,7 +44,6 @@ function loadPopupState() {
           // Value is valid
           value = result[key];
         }
-        console.log(key, ": ", value);
         // Update the DOM
         document.getElementById(elementId).value = value;
       };
@@ -100,6 +99,25 @@ function requestCurrentTime(isStartTime) {
 
 // Function to request FPS from the content script
 function requestFPS(isStepFrames = false, shouldSave = true) {
+  // Try to get the cached FPS
+  const cachedFPS = sessionStorage.getItem("cachedFPS");
+
+  // Check if the value exists
+  if (cachedFPS !== null) {
+    console.log("Using cached FPS");
+    return new Promise((resolve) => {
+      // Update the DOM
+      document.getElementById("frameRate").value = cachedFPS;
+
+      // Save the popup if shouldSave is true
+      shouldSave && savePopupState();
+
+      // Resolve the Promise
+      resolve(cachedFPS);
+    });
+  }
+
+  // Cached FPS doesn't exist
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { action: "getFPS" }, (response) => {
@@ -107,6 +125,7 @@ function requestFPS(isStepFrames = false, shouldSave = true) {
           document.getElementById("frameRate").value = response.fps;
 
           shouldSave && savePopupState(); // Save only if shouldSave is true
+          sessionStorage.setItem("cachedFPS", response.fps);
           resolve(response.fps);
         } else {
           console.log("FPS could not be retrieved.");
@@ -380,7 +399,6 @@ document.getElementById("backwardsButton").addEventListener("click", () => {
 document.getElementById("forwardsButton").addEventListener("click", () => {
   requestFPS(true).then((fps) => {
     const frames = document.getElementById("stepFramesValue").value;
-    console.log(`frames: ${frames}`);
     requestStepFrames(frames, fps);
   });
 });
