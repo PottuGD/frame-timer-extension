@@ -132,7 +132,7 @@ function requestStepFrames(frames, fps) {
 // Function to show error on input field and display an error message
 function showError(inputElement, errorMessage) {
   // Set the input border to red
-  inputElement.style.border = "2px solid #F73D3D";
+  inputElement.classList.add("error");
 
   // Get the error message container and show it
   const errorContainer = document.getElementById("errorContainer");
@@ -163,7 +163,7 @@ function validateInput(input, inputName) {
     return false;
   }
 
-  input.style.border = "none"; // Clear border style
+  input.classList.remove("error"); // Remove the error styling
   return true;
 }
 
@@ -173,6 +173,18 @@ function checkValues() {
   const startTimeInput = document.getElementById("startTime");
   const endTimeInput = document.getElementById("endTime");
   const frameRateInput = document.getElementById("frameRate");
+
+  // Round the value to the nearest frame
+  const startFrame = parseTime(startTimeInput.value);
+  const endFrame = parseTime(endTimeInput.value);
+
+  // Update DOM
+  if (startFrame !== null) {
+    startTimeInput.value = startFrame;
+  }
+  if (endFrame !== null) {
+    endTimeInput.value = endFrame;
+  }
 
   // Validate each input
   if (!validateInput(startTimeInput, "Start time")) {
@@ -191,23 +203,38 @@ function checkValues() {
 }
 
 // Function to compute the times
-function compute(frameRate, startFrame, endFrame) {
+function compute() {
   // Ensure that values are valid
   if (!checkValues()) {
     return;
   }
 
-  // Initiate basic time variables
+  // Get the input elements
+  const startTimeInput = document.getElementById("startTime");
+  const endTimeInput = document.getElementById("endTime");
+  const frameRateInput = document.getElementById("frameRate");
+
+  // Get the values of the input elements
+  const startTime = parseFloat(startTimeInput.value);
+  const endTime = parseFloat(endTimeInput.value);
+  const frameRate = parseInt(frameRateInput.value);
+
+  // Round the value to the nearest frame
+  const startFrame = roundToFrame(startTime, frameRate);
+  const endFrame = roundToFrame(endTime, frameRate);
+
+  // Initiate variables to be in the global scope
   let hours = 0;
   let minutes = 0;
   let seconds = 0;
   let milliseconds = 0;
 
-  // Calculate framerate
+  // Calculate frame rate
   let frames = (endFrame - startFrame) * frameRate;
   seconds = Math.floor(frames / frameRate);
   frames = frames % frameRate;
   milliseconds = Math.round((frames / frameRate) * 1000);
+
   if (milliseconds < 10) {
     milliseconds = "00" + milliseconds;
   } else if (milliseconds < 100) {
@@ -234,9 +261,10 @@ function compute(frameRate, startFrame, endFrame) {
     "s " +
     milliseconds.toString() +
     "ms";
-  const modMessage = `Mod Message: Time starts at ${parseFloat(
-    startFrame
-  ).toFixed(3)} and ends at ${parseFloat(endFrame).toFixed(
+
+  const modMessage = `Mod Message: Time starts at ${startFrame.toFixed(
+    3
+  )} and ends at ${endFrame.toFixed(
     3
   )} at ${frameRate} fps to get a final time of ${finalTime}.`;
   const credits =
@@ -253,12 +281,43 @@ function compute(frameRate, startFrame, endFrame) {
 }
 
 // Function to round the time values to the nearest frame to improve accuracy
-function roundToFrame(targetFrame, frameRate) {
+function roundToFrame(targetFrameStr, frameRateStr) {
+  const targetFrame = parseFloat(targetFrameStr);
+  const frameRate = parseInt(frameRateStr);
+
+  // Check if values are valid
+  if (
+    isNaN(frameRate) ||
+    isNaN(targetFrame) ||
+    typeof targetFrame !== "number" ||
+    typeof frameRate !== "number"
+  ) {
+    return null;
+  }
+
   // Calculate the frame
   let frameFromObj = (time, fps) => Math.floor(time * fps) / fps; //round to the nearest frame
   let finalFrame = frameFromObj(targetFrame, frameRate);
 
   return finalFrame;
+}
+
+// Function to parse the input JSON and format it
+function parseTime(targetFrame) {
+  // Get the frame rate from the input element
+  const frameRate = document.getElementById("frameRate").value;
+
+  // Parse the debug info JSON from the input element
+  const frameFromInputText = JSON.parse(targetFrame).lct;
+
+  // Check if the value is a JSON or not
+  if (typeof frameFromInputText !== "undefined") {
+    // Use the time from the JSON
+    return roundToFrame(frameFromInputText, frameRate);
+  } else {
+    // Use the time from the input element
+    return roundToFrame(targetFrame, frameRate);
+  }
 }
 
 // Event listeners for the buttons
@@ -277,26 +336,8 @@ document
   });
 
 document.getElementById("calculateBtn").addEventListener("click", function () {
-  // Get the input elements
-  const startTimeInput = document.getElementById("startTime");
-  const endTimeInput = document.getElementById("endTime");
-  const frameRateInput = document.getElementById("frameRate");
-
-  // Get the values of the input elements
-  const startTime = parseFloat(startTimeInput.value);
-  const endTime = parseFloat(endTimeInput.value);
-  const frameRate = parseInt(frameRateInput.value);
-
-  // Round the value to the nearest frame
-  const startFrame = roundToFrame(startTime, frameRate, startTimeInput);
-  const endFrame = roundToFrame(endTime, frameRate, endTimeInput);
-
-  // Update DOM
-  startTimeInput.value = startFrame;
-  endTimeInput.value = endFrame;
-
   // Compute the final time
-  compute(frameRate, startFrame, endFrame);
+  compute();
   savePopupState(); // Save the state after calculation
 });
 
@@ -328,12 +369,13 @@ document.getElementById("forwardsButton").addEventListener("click", () => {
   });
 });
 
-// Save the popup state when input fields change
+// Save the popup state when an input field is no longer in focus
 const inputs = document.querySelectorAll("input"); // Selects all input elements
 
 // Loop through all input elements and add an event listener
 inputs.forEach((input) => {
-  input.addEventListener("input", function () {
+  input.addEventListener("blur", function () {
+    checkValues();
     savePopupState();
   });
 });
