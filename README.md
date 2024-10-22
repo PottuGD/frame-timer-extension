@@ -35,7 +35,6 @@ For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extens
 
 - [ ] Implement caching (at least for `requestFPS()`)
 - [ ] Clean up `loadPopupState()`
-- [ ] Add a timer section to easilly see the final time
 
 ## Credits
 
