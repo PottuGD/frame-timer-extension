@@ -34,7 +34,6 @@ For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extens
 ## TODO:
 
 - [ ] Implement caching (at least for `requestFPS()`)
-- [ ] Clean up `loadPopupState()`
 
 ## Credits
 
