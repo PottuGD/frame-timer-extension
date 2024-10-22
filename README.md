@@ -34,8 +34,6 @@ For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extens
 ## TODO:
 
 - [ ] Implement caching (at least for `requestFPS()`)
-- [ ] Save the inputs' state only when input is complete, rather than on every change.
-- [ ] Make an `error` css class to clean up `showError()`
 - [ ] Clean up `loadPopupState()`
 
 ## Credits
