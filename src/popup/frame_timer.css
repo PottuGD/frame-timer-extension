@@ -139,6 +139,7 @@ button:hover {
 #copyBtn {
   margin-top: 10px;
   background-color: #007acc;
+  display: inline-block;
 }
 
 #errorContainer {
