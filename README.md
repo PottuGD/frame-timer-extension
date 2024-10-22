@@ -37,7 +37,6 @@ For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extens
 - [ ] Save the inputs' state only when input is complete, rather than on every change.
 - [ ] Make an `error` css class to clean up `showError()`
 - [ ] Clean up `loadPopupState()`
-- [ ] Scale UI properly on Chrome
 
 ## Credits
 
