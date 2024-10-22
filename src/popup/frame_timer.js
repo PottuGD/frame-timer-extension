@@ -273,7 +273,8 @@ function compute() {
   // Update the DOM elements
   document.getElementById("resultMessage").textContent =
     modMessage + " " + credits;
-  document.getElementById("output").classList.remove("hidden");
+  document.getElementById("finalTime").textContent = finalTime;
+  document.getElementById("finalTime").classList.remove("hidden");
   document.getElementById("copyBtn").classList.remove("hidden");
 
   // Auto resize the text area
@@ -378,6 +379,11 @@ inputs.forEach((input) => {
     checkValues();
     savePopupState();
   });
+});
+
+// When the result element is clicked select all the text
+document.getElementById("resultMessage").addEventListener("click", function () {
+  this.select();
 });
 
 // Load the saved popup state when the popup is opened
