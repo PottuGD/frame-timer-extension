@@ -1,6 +1,3 @@
-// Sleep function
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 // Function to get the FPS of the video
 async function getFPS() {
   // Select the span containing the resolution@FPS
