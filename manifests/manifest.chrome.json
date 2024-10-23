@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Frame Timer",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Calculates the time between 2 frames in a YouTube video",
   "homepage_url": "https://github.com/PottuGD/frame-timer-extension",
   "icons": {

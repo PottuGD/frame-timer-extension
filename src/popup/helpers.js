@@ -58,53 +58,65 @@ function loadPopupState() {
 }
 
 // Function to request current time from the content script
-function requestCurrentTime(isStartTime) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(
-      tabs[0].id,
-      { action: "getCurrentTime" },
-      (response) => {
-        if (response && response.currentTime !== null) {
-          if (isStartTime) {
-            // Round the response value to the nearest frame
-            const startTime = document.getElementById("startTime");
-            startTime.value = parseTime(response.currentTime);
-          } else {
-            // Round the response value to the nearest frame
-            const endTime = document.getElementById("endTime");
-            endTime.value = parseTime(response.currentTime);
-          }
-          // Save the popup state
-          savePopupState();
+async function requestCurrentTime(timeType) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
         } else {
-          console.error(
-            "Current time could not be retrieved. Try restarting your browser."
-          );
-          if (isStartTime) {
-            showError(
-              document.getElementById("autoStartBtn"),
-              "Could not retrieve current time."
-            );
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        { action: "getCurrentTime" },
+        (response) => {
+          if (response && response.currentTime !== null) {
+            resolve(response);
           } else {
-            showError(
-              document.getElementById("autoEndBtn"),
-              "Could not retrieve current time."
-            );
+            reject(new Error("Could not retrieve current time."));
           }
         }
-      }
+      );
+    });
+
+    if (timeType === "start") {
+      document.getElementById("startTime").value = parseTime(
+        response.currentTime
+      );
+    } else if (timeType === "end") {
+      document.getElementById("endTime").value = parseTime(
+        response.currentTime
+      );
+    }
+
+    savePopupState();
+    return response;
+  } catch (error) {
+    console.error(
+      "Current time could not be retrieved. Try restarting your browser.",
+      error
     );
-  });
+    throw error; // Re-throw error for further handling
+  }
 }
 
 // Function to request FPS from the content script
-function requestFPS(isStepFrames = false, shouldSave = true) {
+async function requestFPS(isStepFrames = false, shouldSave = true) {
   // Try to get the cached FPS
   const cachedFPS = sessionStorage.getItem("cachedFPS");
 
   // Check if the value exists
   if (cachedFPS !== null) {
-    console.log("Using cached FPS");
+    console.log("Using cached FPS: ", cachedFPS);
     return new Promise((resolve) => {
       // Update the DOM
       document.getElementById("frameRate").value = cachedFPS;
@@ -113,7 +125,7 @@ function requestFPS(isStepFrames = false, shouldSave = true) {
       shouldSave && savePopupState();
 
       // Resolve the Promise
-      resolve(cachedFPS);
+      resolve({ fps: cachedFPS, cached: true });
     });
   }
 
@@ -126,7 +138,7 @@ function requestFPS(isStepFrames = false, shouldSave = true) {
 
           shouldSave && savePopupState(); // Save only if shouldSave is true
           sessionStorage.setItem("cachedFPS", response.fps);
-          resolve(response.fps);
+          resolve({ fps: response.fps, cached: false });
         } else {
           console.log("FPS could not be retrieved.");
           if (!isStepFrames) {
@@ -147,15 +159,49 @@ function requestFPS(isStepFrames = false, shouldSave = true) {
   });
 }
 
-// Function to request stepping forward in the video from the content script
-function requestStepFrames(frames, fps) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, {
-      action: "stepFrames",
-      frames: frames,
-      fps: fps,
+// Function to request stepping forward a certain amount of frames in the video from the content script
+async function requestStepFrames(frames, fps) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
     });
-  });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "stepFrames",
+          frames: frames,
+          fps: fps,
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not step frames"));
+          }
+        }
+      );
+    });
+
+    return response; // You can return the response if needed
+  } catch (error) {
+    console.error("Error during stepping frames: ", error);
+    throw error; // Re-throw error for further handling
+  }
 }
 
 // Function to show error on input field and display an error message
@@ -364,4 +410,5 @@ export {
   loadPopupState,
   checkValues,
   compute,
+  parseTime,
 };
