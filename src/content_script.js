@@ -49,7 +49,7 @@ function stepFrames(frames, fps) {
   player.currentTime = player.currentTime + frames / fps;
 }
 
-// Function to open the "Stats for nerds" menu
+// Function to open the "Stats for nerds" panel
 async function openStatsForNerds() {
   return new Promise((resolve) => {
     // Get the player/video element
@@ -68,14 +68,15 @@ async function openStatsForNerds() {
     player.dispatchEvent(rightClickEvent);
 
     // Select the stats for nerds div and click it
-    const statsBtn = document.querySelector("div.ytp-menuitem:nth-child(7)");
-    statsBtn.click();
+    const statsButton = document.querySelector("div.ytp-menuitem:nth-child(7)");
+    statsButton.click();
 
     // Resolve the Promise
     resolve();
   });
 }
 
+// Function to close the "Stats for nerds" panel
 async function closeStatsForNerds() {
   return new Promise((resolve, reject) => {
     // Select the close button
@@ -92,6 +93,35 @@ async function closeStatsForNerds() {
     // Resolve the Promise
     resolve();
   });
+}
+
+// Function to step a certain amount of seconds forward in the video
+function stepSeconds(seconds) {
+  // Get the player/video element
+  const player = document.getElementsByTagName("video")[0];
+
+  // Jump forward set amount of seconds
+  player.currentTime = player.currentTime + seconds;
+}
+
+// Function to pause/unpause the video
+function pauseVideo(shouldPause) {
+  // Get the player/video element
+  const player = document.getElementsByTagName("video")[0];
+
+  // Pause or unpause the video
+  if (shouldPause) {
+    player.pause();
+  } else {
+    player.play();
+  }
+}
+
+// Function to get the state of the video
+function getVideoState() {
+  // Get the player/video element
+  const player = document.getElementsByTagName("video")[0];
+  return !player.paused;
 }
 
 // Listen for messages from the popup
@@ -113,10 +143,26 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // stepFrames
   if (message.action === "stepFrames") {
-    const frames = message.frames;
-    const fps = message.fps;
-    stepFrames(frames, fps);
+    stepFrames(message.frames, message.fps);
     sendResponse({ status: "completed" });
+  }
+
+  // stepSeconds
+  if (message.action === "stepSeconds") {
+    stepSeconds(message.seconds);
+    sendResponse({ status: "completed" });
+  }
+
+  // pauseVideo
+  if (message.action === "pauseVideo") {
+    pauseVideo(message.shouldPause);
+    sendResponse({ status: "completed" });
+  }
+
+  // getPausedState
+  if (message.action === "getVideoState") {
+    const state = getVideoState();
+    sendResponse({ state: state, status: "completed" });
   }
 
   // Return true to ensure the channel remains open for async responses

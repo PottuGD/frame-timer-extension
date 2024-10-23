@@ -2,13 +2,13 @@ import * as helpers from "./helpers.js";
 
 // Event listeners for the auto buttons
 document
-  .getElementById("autoStartBtn")
+  .getElementById("autoStartButton")
   .addEventListener("click", async function () {
     // Set the start time to the current time
-    await helpers.requestCurrentTime("start");
+    await helpers.getCurrentTime("start");
 
     // Update the FPS
-    await helpers.requestFPS();
+    await helpers.getFPS();
 
     // Format the time values
     const startTime = document.getElementById("startTime");
@@ -18,13 +18,13 @@ document
   });
 
 document
-  .getElementById("autoEndBtn")
+  .getElementById("autoEndButton")
   .addEventListener("click", async function () {
     // Set the end time to the current time
-    await helpers.requestCurrentTime("end");
+    await helpers.getCurrentTime("end");
 
     // Update the FPS
-    await helpers.requestFPS();
+    await helpers.getFPS();
 
     const startTime = document.getElementById("startTime");
     const endTime = document.getElementById("endTime");
@@ -33,9 +33,9 @@ document
   });
 
 document
-  .getElementById("autoFrameRateBtn")
+  .getElementById("autoFrameRateButton")
   .addEventListener("click", async function () {
-    await helpers.requestFPS();
+    await helpers.getFPS();
 
     const startTime = document.getElementById("startTime");
     const endTime = document.getElementById("endTime");
@@ -44,14 +44,16 @@ document
   });
 
 // Event listener for the calculate button
-document.getElementById("calculateBtn").addEventListener("click", function () {
-  // Compute the final time
-  helpers.compute();
-  helpers.savePopupState(); // Save the state after calculation
-});
+document
+  .getElementById("calculateButton")
+  .addEventListener("click", function () {
+    // Compute the final time
+    helpers.compute();
+    helpers.savePopupState(); // Save the state after calculation
+  });
 
 // Event listener for the copy button
-document.getElementById("copyBtn").addEventListener("click", function () {
+document.getElementById("copyButton").addEventListener("click", function () {
   const resultMessage = document.getElementById("resultMessage").textContent;
   navigator.clipboard
     .writeText(resultMessage)
@@ -68,10 +70,10 @@ document
   .getElementById("backwardsButton")
   .addEventListener("click", async () => {
     try {
-      const response = await helpers.requestFPS(true, false);
+      const response = await helpers.getFPS(true, false);
       const frames = document.getElementById("stepFramesValue").value;
       const negativeFrames = -frames;
-      helpers.requestStepFrames(negativeFrames, response.fps);
+      helpers.stepFrames(negativeFrames, response.fps);
     } catch (error) {
       console.error("Error fetching FPS:", error);
     }
@@ -82,13 +84,24 @@ document
   .getElementById("forwardsButton")
   .addEventListener("click", async () => {
     try {
-      const response = await helpers.requestFPS(true, false);
+      const response = await helpers.getFPS(true, false);
       const frames = document.getElementById("stepFramesValue").value;
-      helpers.requestStepFrames(frames, response.fps);
+      helpers.stepFrames(frames, response.fps);
     } catch (error) {
       console.error("Error fetching FPS:", error);
     }
   });
+
+// Event listener for the play/pause button
+document.getElementById("playButton").addEventListener("click", async () => {
+  const videoState = await helpers.getVideoState(); // true: playing, false: paused
+  helpers.pauseVideo(videoState.state);
+
+  document.getElementById("playButtonIcon").src = videoState.state
+    ? "../icons/symbols/play_arrow.svg"
+    : "../icons/symbols/pause.svg";
+});
+
 // Save the popup state when an input field is no longer in focus
 const inputs = document.querySelectorAll("input"); // Selects all input elements
 
@@ -103,6 +116,59 @@ inputs.forEach((input) => {
 // When the result element is clicked select all the text
 document.getElementById("resultMessage").addEventListener("click", function () {
   this.select();
+});
+
+// Add an event listener for keydown events
+document.addEventListener("keydown", async (event) => {
+  // Check if the active element is the body or a specific background element
+  const activeElement = document.activeElement;
+  if (activeElement.tagName !== "BODY" && activeElement.tagName !== "HTML") {
+    // Check if the active element is an input or a textarea
+    if (
+      activeElement.tagName === "INPUT" ||
+      activeElement.tagName === "TEXTAREA" ||
+      activeElement.isContentEditable
+    ) {
+      return; // Exit if an input, textarea, or editable element is focused
+    }
+  }
+
+  // Defocus the active element if exists
+  // Fixes problem where buttons activate when EG. space is pressed
+  if (document.activeElement) {
+    document.activeElement.blur();
+  }
+
+  switch (event.key) {
+    case "ArrowLeft":
+      helpers.stepSeconds(-5);
+      break;
+    case "ArrowRight":
+      helpers.stepSeconds(5);
+      break;
+    case "j":
+    case "J":
+      helpers.stepSeconds(-10);
+      break;
+    case "l":
+    case "L":
+      helpers.stepSeconds(10);
+      break;
+    case ",":
+    case ".":
+      const fpsRequest = await helpers.getFPS(true, false);
+      const step = event.key === "," ? -1 : 1;
+      helpers.stepFrames(step, fpsRequest.fps);
+      break;
+    case " ": // Space
+      const videoState = await helpers.getVideoState(); // true: playing, false: paused
+      helpers.pauseVideo(videoState.state);
+
+      document.getElementById("playButtonIcon").src = videoState.state
+        ? "../icons/symbols/play_arrow.svg"
+        : "../icons/symbols/pause.svg";
+      break;
+  }
 });
 
 // Load the saved popup state when the popup is opened

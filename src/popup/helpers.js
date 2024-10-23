@@ -1,3 +1,6 @@
+// Variables for caching
+let cachedFPS;
+
 // Function to show and resize the text area
 function autoResize(textarea) {
   textarea.classList.remove("hidden"); // Make the text area visible
@@ -58,7 +61,7 @@ function loadPopupState() {
 }
 
 // Function to request current time from the content script
-async function requestCurrentTime(timeType) {
+async function getCurrentTime(timeType) {
   try {
     const tabs = await new Promise((resolve, reject) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -105,17 +108,14 @@ async function requestCurrentTime(timeType) {
       "Current time could not be retrieved. Try restarting your browser.",
       error
     );
-    throw error; // Re-throw error for further handling
+    throw error; // Re-throw error
   }
 }
 
 // Function to request FPS from the content script
-async function requestFPS(isStepFrames = false, shouldSave = true) {
-  // Try to get the cached FPS
-  const cachedFPS = sessionStorage.getItem("cachedFPS");
-
-  // Check if the value exists
-  if (cachedFPS !== null) {
+async function getFPS(isStepFrames = false, shouldSave = true) {
+  // Check if the cached FPS exists
+  if (cachedFPS !== undefined) {
     console.log("Using cached FPS: ", cachedFPS);
     return new Promise((resolve) => {
       // Update the DOM
@@ -136,14 +136,19 @@ async function requestFPS(isStepFrames = false, shouldSave = true) {
         if (response && response.fps) {
           document.getElementById("frameRate").value = response.fps;
 
-          shouldSave && savePopupState(); // Save only if shouldSave is true
-          sessionStorage.setItem("cachedFPS", response.fps);
+          // Save only if shouldSave is true
+          shouldSave && savePopupState();
+
+          // Cache the fps
+          cachedFPS = response.fps;
+
+          // Resolve the Promise
           resolve({ fps: response.fps, cached: false });
         } else {
           console.log("FPS could not be retrieved.");
           if (!isStepFrames) {
             showError(
-              document.getElementById("autoFrameRateBtn"),
+              document.getElementById("autoFrameRateButton"),
               'Could not retrieve FPS. Did you click on "Stats For Nerds"?'
             );
           } else {
@@ -159,8 +164,8 @@ async function requestFPS(isStepFrames = false, shouldSave = true) {
   });
 }
 
-// Function to request stepping forward a certain amount of frames in the video from the content script
-async function requestStepFrames(frames, fps) {
+// Function to request stepping forward a certain amount of FRAMES in the video from the content script
+async function stepFrames(frames, fps) {
   try {
     const tabs = await new Promise((resolve, reject) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -197,10 +202,141 @@ async function requestStepFrames(frames, fps) {
       );
     });
 
-    return response; // You can return the response if needed
+    return response;
   } catch (error) {
     console.error("Error during stepping frames: ", error);
-    throw error; // Re-throw error for further handling
+    throw error; // Re-throw error
+  }
+}
+
+// Function to request stepping forward a certain amount of SECONDS in the video from the content script
+async function stepSeconds(seconds) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "stepSeconds",
+          seconds: seconds,
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not step seconds"));
+          }
+        }
+      );
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during stepping seconds: ", error);
+    throw error; // Re-throw error
+  }
+}
+
+// Function to request the state of the video
+async function getVideoState() {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "getVideoState",
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not get the video state"));
+          }
+        }
+      );
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during the request of video status: ", error);
+    throw error; // Re-throw error
+  }
+}
+
+// Function to request the pause/unpause of the video
+async function pauseVideo(shouldPause) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "pauseVideo",
+          shouldPause: shouldPause,
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not pause the video"));
+          }
+        }
+      );
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during pausing video: ", error);
+    throw error; // Re-throw error
   }
 }
 
@@ -349,8 +485,9 @@ function compute() {
   document.getElementById("resultMessage").textContent =
     modMessage + " " + credits;
   document.getElementById("finalTime").textContent = finalTime;
-  document.getElementById("finalTime").classList.remove("hidden");
-  document.getElementById("copyBtn").classList.remove("hidden");
+  document.getElementById("output").classList.remove("hidden");
+  // document.getElementById("finalTime").classList.remove("hidden");
+  // document.getElementById("copyButton").classList.remove("hidden");
 
   // Auto resize the text area
   autoResize(document.getElementById("resultMessage"));
@@ -403,9 +540,12 @@ function parseTime(targetFrame) {
 
 // Export the functions
 export {
-  requestCurrentTime,
-  requestFPS,
-  requestStepFrames,
+  getCurrentTime,
+  getFPS,
+  stepFrames,
+  stepSeconds,
+  getVideoState,
+  pauseVideo,
   savePopupState,
   loadPopupState,
   checkValues,

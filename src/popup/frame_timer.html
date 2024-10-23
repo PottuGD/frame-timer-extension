@@ -14,22 +14,51 @@
       </div>
       <h1>Frame Timer</h1>
 
-      <div class="input-container">
-        <button class="stepFramesBtn" id="backwardsButton">
-          <span class="backwards-sign"><</span>
-        </button>
+      <div class="video-controls-container">
+        <div class="video-controls">
+          <button
+            class="stepFramesButton"
+            id="backwardsButton"
+            title="Go set amount of frames backwards"
+          >
+            <img
+              src="../icons/symbols/fast_rewind.svg"
+              alt="Rewind"
+              class="icon"
+            />
+          </button>
 
-        <input
-          type="number"
-          class="step-frames-value"
-          id="stepFramesValue"
-          value="1"
-          min="1"
-        />
+          <input
+            type="number"
+            class="step-frames-value"
+            id="stepFramesValue"
+            value="1"
+            min="1"
+          />
 
-        <button class="stepFramesBtn" id="forwardsButton">
-          <span class="forwards-sign">></span>
-        </button>
+          <button
+            class="stepFramesButton"
+            id="forwardsButton"
+            title="Go set amount of frames forwards"
+          >
+            <img
+              src="../icons/symbols/fast_forward.svg"
+              alt="Forward"
+              class="icon"
+            />
+          </button>
+        </div>
+
+        <div class="video-controls">
+          <button id="playButton" title="Toggle play/pause">
+            <img
+              src="../icons/symbols/play_arrow.svg"
+              alt="Play"
+              class="icon"
+              id="playButtonIcon"
+            />
+          </button>
+        </div>
       </div>
 
       <label for="calculatedFPS" id="calculatedFPS"></label>
@@ -38,7 +67,17 @@
         <label for="startTime">Start Time:</label>
         <div class="input-container">
           <input type="text" id="startTime" placeholder="Enter start time" />
-          <button class="auto-btn" id="autoStartBtn">Auto</button>
+          <button
+            class="auto-button"
+            id="autoStartButton"
+            title="Set the current frame as the start frame"
+          >
+            <img
+              src="../icons/symbols/timer.svg"
+              alt="Auto Start Time"
+              class="icon"
+            />
+          </button>
         </div>
       </div>
 
@@ -46,7 +85,17 @@
         <label for="endTime">End Time:</label>
         <div class="input-container">
           <input type="text" id="endTime" placeholder="Enter end time" />
-          <button class="auto-btn" id="autoEndBtn">Auto</button>
+          <button
+            class="auto-button"
+            id="autoEndButton"
+            title="Set the current frame as the end frame"
+          >
+            <img
+              src="../icons/symbols/timer.svg"
+              alt="Auto End Time"
+              class="icon"
+            />
+          </button>
         </div>
       </div>
 
@@ -54,7 +103,17 @@
         <label for="frameRate">Frame Rate:</label>
         <div class="input-container">
           <input type="text" id="frameRate" placeholder="Enter frame rate" />
-          <button class="auto-btn" id="autoFrameRateBtn">Auto</button>
+          <button
+            class="auto-button"
+            id="autoFrameRateButton"
+            title="Automatically sets the FPS"
+          >
+            <img
+              src="../icons/symbols/filter_none.svg"
+              alt="Auto FPS"
+              class="icon"
+            />
+          </button>
         </div>
       </div>
 
@@ -62,13 +121,35 @@
         <p><strong>Error: </strong><span id="errorMessage"></span></p>
       </div>
 
-      <button id="calculateBtn">Calculate</button>
+      <button
+        class="icon-and-text"
+        id="calculateButton"
+        title="Compute the final time"
+      >
+        <img
+          src="../icons/symbols/manufacturing.svg"
+          alt="Calculate"
+          class="icon"
+        />
+        <span class="icon-and-text-label">Calculate</span>
+      </button>
 
-      <div id="output">
-        <textarea id="finalTime" class="result hidden" readonly></textarea>
-        <textarea id="resultMessage" class="result hidden" readonly></textarea>
+      <div id="output" class="hidden">
+        <textarea id="finalTime" class="result" readonly></textarea>
+        <textarea id="resultMessage" class="result" readonly></textarea>
 
-        <button id="copyBtn" class="hidden">Copy Mod Message</button>
+        <button
+          id="copyButton"
+          class="icon-and-text"
+          title="Copy the mod message to clipboard"
+        >
+          <img
+            src="../icons/symbols/content_copy.svg"
+            alt="Copy Mod Message"
+            class="icon"
+          />
+          <span class="icon-and-text-label">Copy</span>
+        </button>
       </div>
     </div>
 
