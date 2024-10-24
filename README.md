@@ -33,6 +33,7 @@ For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extens
 
 ## TODO:
 
+- [ ] Simplify the helper request functions by making a new function to do the chrome.tabs.query and sendMessage
 - [ ] Make the tool also work on speedrun.com
 
 ## Credits
