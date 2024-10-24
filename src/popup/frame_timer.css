@@ -5,7 +5,6 @@ body {
   background-color: #1e1e1e;
   color: #f5f5f5;
   width: 400px;
-  max-height: 600px;
   font-family: "Noto Sans", sans-serif;
   font-size: 16px;
   margin: 0;
@@ -113,10 +112,39 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
   background-color: #005f99;
+}
+
+#hideStats {
+  display: none;
+}
+
+.toggle-button {
+  height: 32px;
+  padding: 0 7px;
+  background-color: #007acc;
+  color: #f5f5f5;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+  background-color: #005f99;
+}
+
+.toggle-button.pressed {
+  background-color: #005184;
 }
 
 .stepFramesButton {
@@ -142,16 +170,26 @@ button:hover {
   margin: 0;
 }
 
+.playback-rate {
+  font-size: 15px;
+  width: 50px;
+  height: 25px;
+  color: #cccccc;
+  background-color: #3b3b3b;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 #playButton {
   height: 25px;
   width: 30px;
-  background-color: #007acc;
   margin: 10px;
 }
 
 #output {
   margin-top: 15px;
-  margin-bottom: 40px;
   text-align: center;
   width: 100%;
 }
@@ -186,7 +224,6 @@ button:hover {
 
 #copyButton {
   margin-top: 12px;
-  background-color: #007acc;
   display: inline-block;
 }
 

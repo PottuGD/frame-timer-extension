@@ -11,12 +11,29 @@ function autoResize(textarea) {
   textarea.style.height = textarea.scrollHeight + "px"; // Adjust height to fit content
 }
 
+// Function to toggle the hideStats button
+function toggleHideStatsButton(toggled) {
+  const button = document.getElementById("hideStatsButton");
+  document.getElementById("hideStats").checked = toggled;
+  toggleStats(toggled);
+  if (toggled) {
+    button.src = "../icons/symbols/visibility.svg";
+    button.classList.remove("pressed");
+  } else {
+    button.src = "../icons/symbols/visibility_off.svg";
+    button.classList.add("pressed");
+  }
+  savePopupState();
+}
+
 // Helper function to save the popup state
 function savePopupState() {
   const startTime = document.getElementById("startTime").value;
   const endTime = document.getElementById("endTime").value;
   const frameRate = document.getElementById("frameRate").value;
   const stepFramesValue = document.getElementById("stepFramesValue").value;
+  const hideStatsChecked = document.getElementById("hideStats").checked;
+  const playbackRate = document.getElementById("playbackRate").value;
 
   chrome.storage.local.set(
     {
@@ -24,6 +41,8 @@ function savePopupState() {
       endTime,
       frameRate,
       stepFramesValue,
+      hideStatsChecked,
+      playbackRate,
     },
     () => {
       console.log("Popup state saved.");
@@ -32,9 +51,16 @@ function savePopupState() {
 }
 
 // Helper function to load the popup state
-function loadPopupState() {
+async function loadPopupState() {
   chrome.storage.local.get(
-    ["startTime", "endTime", "frameRate", "stepFramesValue"],
+    [
+      "startTime",
+      "endTime",
+      "frameRate",
+      "stepFramesValue",
+      "hideStatsChecked",
+      "playbackRate",
+    ],
     (result) => {
       // Helper function to set the element value or a default value
       const setValue = (key, elementId, defaultValue) => {
@@ -56,6 +82,12 @@ function loadPopupState() {
       setValue("endTime", "endTime", "");
       setValue("frameRate", "frameRate", 60);
       setValue("stepFramesValue", "stepFramesValue", "");
+      setValue("playbackRate", "playbackRate", 1);
+
+      if (result["hideStatsChecked"]) {
+        toggleHideStatsButton(result["hideStatsChecked"]);
+        toggleStats(result["hideStatsChecked"]);
+      }
     }
   );
 }
@@ -145,7 +177,7 @@ async function getFPS(isStepFrames = false, shouldSave = true) {
           // Resolve the Promise
           resolve({ fps: response.fps, cached: false });
         } else {
-          console.log("FPS could not be retrieved.");
+          console.error("FPS could not be retrieved.");
           if (!isStepFrames) {
             showError(
               document.getElementById("autoFrameRateButton"),
@@ -164,7 +196,7 @@ async function getFPS(isStepFrames = false, shouldSave = true) {
   });
 }
 
-// Function to request stepping forward a certain amount of FRAMES in the video from the content script
+// Function to request stepping forward a certain amount of FRAMES in the video
 async function stepFrames(frames, fps) {
   try {
     const tabs = await new Promise((resolve, reject) => {
@@ -209,7 +241,7 @@ async function stepFrames(frames, fps) {
   }
 }
 
-// Function to request stepping forward a certain amount of SECONDS in the video from the content script
+// Function to request stepping forward a certain amount of SECONDS in the video
 async function stepSeconds(seconds) {
   try {
     const tabs = await new Promise((resolve, reject) => {
@@ -249,6 +281,50 @@ async function stepSeconds(seconds) {
     return response;
   } catch (error) {
     console.error("Error during stepping seconds: ", error);
+    throw error; // Re-throw error
+  }
+}
+
+// Function to request going to a specific time in the video
+async function jumpToTime(time) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "jumpToTime",
+          time: time,
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not go to the specified time"));
+          }
+        }
+      );
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during jumpToTime: ", error);
     throw error; // Re-throw error
   }
 }
@@ -296,6 +372,50 @@ async function getVideoState() {
   }
 }
 
+// Function to request to open/close the "Stats for nerds" panel
+async function toggleStats(shouldOpen) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "toggleStats",
+          shouldOpen: shouldOpen,
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not toggle the stats"));
+          }
+        }
+      );
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during toggleStats: ", error);
+    throw error; // Re-throw error
+  }
+}
+
 // Function to request the pause/unpause of the video
 async function pauseVideo(shouldPause) {
   try {
@@ -336,6 +456,50 @@ async function pauseVideo(shouldPause) {
     return response;
   } catch (error) {
     console.error("Error during pausing video: ", error);
+    throw error; // Re-throw error
+  }
+}
+
+// Function to request to set the playback rate of the video
+async function setPlaybackRate(playbackRate) {
+  try {
+    const tabs = await new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error("Failed to query active tabs."));
+        } else {
+          resolve(tabs);
+        }
+      });
+    });
+
+    if (tabs.length === 0) {
+      throw new Error("No active tabs found.");
+    }
+
+    const response = await new Promise((resolve, reject) => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          action: "setPlaybackRate",
+          playbackRate: playbackRate,
+        },
+        (response) => {
+          // Check if we got a valid response
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else if (response && response.status === "completed") {
+            resolve(response);
+          } else {
+            reject(new Error("Could not set the playback rate"));
+          }
+        }
+      );
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during setPlaybackRate: ", error);
     throw error; // Re-throw error
   }
 }
@@ -540,15 +704,20 @@ function parseTime(targetFrame) {
 
 // Export the functions
 export {
+  toggleHideStatsButton,
   getCurrentTime,
   getFPS,
   stepFrames,
   stepSeconds,
+  jumpToTime,
   getVideoState,
   pauseVideo,
+  setPlaybackRate,
+  toggleStats,
   savePopupState,
   loadPopupState,
   checkValues,
   compute,
   parseTime,
+  showError,
 };

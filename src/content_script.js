@@ -8,7 +8,7 @@ async function getFPS() {
   // Check if the span exists
   if (!resSpan) {
     // If it did not exist open the "Stats for nerds" panel
-    await openStatsForNerds();
+    await openStats();
 
     // And try to look for it again
     resSpan = document.querySelector(
@@ -22,7 +22,7 @@ async function getFPS() {
   // Close the "Stats for nerds" popup
   try {
     // Close the "Stats for nerds" popup
-    await closeStatsForNerds();
+    await closeStats();
   } catch {
     console.warn("Stats for nerds not closed");
   }
@@ -50,7 +50,7 @@ function stepFrames(frames, fps) {
 }
 
 // Function to open the "Stats for nerds" panel
-async function openStatsForNerds() {
+async function openStats() {
   return new Promise((resolve) => {
     // Get the player/video element
     const player = document.getElementsByTagName("video")[0];
@@ -77,7 +77,7 @@ async function openStatsForNerds() {
 }
 
 // Function to close the "Stats for nerds" panel
-async function closeStatsForNerds() {
+async function closeStats() {
   return new Promise((resolve, reject) => {
     // Select the close button
     const closeButton = document.querySelector(".ytp-sfn-close");
@@ -104,6 +104,15 @@ function stepSeconds(seconds) {
   player.currentTime = player.currentTime + seconds;
 }
 
+// Function to go to a specific time in the video
+function jumpToTime(time) {
+  // Get the player/video element
+  const player = document.getElementsByTagName("video")[0];
+
+  // Go to the specified time
+  player.currentTime = time;
+}
+
 // Function to pause/unpause the video
 function pauseVideo(shouldPause) {
   // Get the player/video element
@@ -122,6 +131,15 @@ function getVideoState() {
   // Get the player/video element
   const player = document.getElementsByTagName("video")[0];
   return !player.paused;
+}
+
+// Function to set the playback rate of the video
+function setPlaybackRate(playbackRate) {
+  // Get the player/video element
+  const player = document.getElementsByTagName("video")[0];
+
+  // Set the playback rate
+  player.playbackRate = playbackRate;
 }
 
 // Listen for messages from the popup
@@ -153,9 +171,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ status: "completed" });
   }
 
+  // jumpToTime
+  if (message.action === "jumpToTime") {
+    jumpToTime(message.time);
+    sendResponse({ status: "completed" });
+  }
+
   // pauseVideo
   if (message.action === "pauseVideo") {
     pauseVideo(message.shouldPause);
+    sendResponse({ status: "completed" });
+  }
+
+  // setPlaybackRate
+  if (message.action === "setPlaybackRate") {
+    setPlaybackRate(message.playbackRate);
     sendResponse({ status: "completed" });
   }
 
@@ -163,6 +193,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "getVideoState") {
     const state = getVideoState();
     sendResponse({ state: state, status: "completed" });
+  }
+
+  // toggleStats
+  if (message.action === "toggleStats") {
+    if (message.shouldOpen) {
+      openStats().then(() => {
+        sendResponse({ status: "completed" });
+      });
+    } else {
+      closeStats().then(() => {
+        sendResponse({ status: "completed" });
+      });
+    }
+    // Return true to indicate that the response will be sent asynchronously
+    return true;
   }
 
   // Return true to ensure the channel remains open for async responses

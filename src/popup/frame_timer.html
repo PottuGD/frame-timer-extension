@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="frame_timer.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tippy.js@6.3.7/dist/tippy.css"
+    />
   </head>
   <body>
     <div id="popup-content">
@@ -17,14 +21,15 @@
       <div class="video-controls-container">
         <div class="video-controls">
           <button
-            class="stepFramesButton"
+            class="stepFramesButton tooltip"
             id="backwardsButton"
-            title="Go set amount of frames backwards"
+            data-tooltip="Go set amount of frames backwards"
           >
             <img
               src="../icons/symbols/fast_rewind.svg"
               alt="Rewind"
               class="icon"
+              draggable="false"
             />
           </button>
 
@@ -37,45 +42,74 @@
           />
 
           <button
-            class="stepFramesButton"
+            class="stepFramesButton tooltip"
             id="forwardsButton"
-            title="Go set amount of frames forwards"
+            data-tooltip="Go set amount of frames forwards"
           >
             <img
               src="../icons/symbols/fast_forward.svg"
               alt="Forward"
               class="icon"
+              draggable="false"
             />
           </button>
         </div>
 
         <div class="video-controls">
-          <button id="playButton" title="Toggle play/pause">
+          <button
+            class="tooltip"
+            id="playButton"
+            data-tooltip="Toggle play/pause"
+          >
             <img
               src="../icons/symbols/play_arrow.svg"
               alt="Play"
               class="icon"
               id="playButtonIcon"
+              draggable="false"
             />
           </button>
+
+          <select
+            id="playbackRate"
+            class="playback-rate tooltip"
+            data-tooltip="Set the playback speed"
+          >
+            <option value="0.25">0.25x</option>
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1x</option>
+            <option value="2">2x</option>
+            <option value="4">4x</option>
+          </select>
         </div>
       </div>
-
-      <label for="calculatedFPS" id="calculatedFPS"></label>
 
       <div class="input-group">
         <label for="startTime">Start Time:</label>
         <div class="input-container">
           <input type="text" id="startTime" placeholder="Enter start time" />
           <button
-            class="auto-button"
+            class="auto-button tooltip"
             id="autoStartButton"
-            title="Set the current frame as the start frame"
+            data-tooltip="Set the current frame as the start frame"
           >
             <img
               src="../icons/symbols/timer.svg"
               alt="Auto Start Time"
               class="icon"
+              draggable="false"
+            />
+          </button>
+          <button
+            class="auto-button tooltip"
+            id="jumpToStartTimeButton"
+            data-tooltip="Go to this time in the video"
+          >
+            <img
+              src="../icons/symbols/pin_drop.svg"
+              alt="Go to this time"
+              class="icon"
+              draggable="false"
             />
           </button>
         </div>
@@ -86,14 +120,27 @@
         <div class="input-container">
           <input type="text" id="endTime" placeholder="Enter end time" />
           <button
-            class="auto-button"
+            class="auto-button tooltip"
             id="autoEndButton"
-            title="Set the current frame as the end frame"
+            data-tooltip="Set the current frame as the end frame"
           >
             <img
               src="../icons/symbols/timer.svg"
               alt="Auto End Time"
               class="icon"
+              draggable="false"
+            />
+          </button>
+          <button
+            class="auto-button tooltip"
+            id="jumpToEndTimeButton"
+            data-tooltip="Go to this time in the video"
+          >
+            <img
+              src="../icons/symbols/pin_drop.svg"
+              alt="Go to this time"
+              class="icon"
+              draggable="false"
             />
           </button>
         </div>
@@ -104,16 +151,31 @@
         <div class="input-container">
           <input type="text" id="frameRate" placeholder="Enter frame rate" />
           <button
-            class="auto-button"
+            class="auto-button tooltip"
             id="autoFrameRateButton"
-            title="Automatically sets the FPS"
+            data-tooltip="Automatically set the FPS."
           >
             <img
               src="../icons/symbols/filter_none.svg"
               alt="Auto FPS"
               class="icon"
+              draggable="false"
             />
           </button>
+          <input
+            type="checkbox"
+            aria-pressed="true"
+            class="auto-button"
+            id="hideStats"
+          />
+          <img
+            src="../icons/symbols/visibility_off.svg"
+            alt="Go to this time"
+            class="toggle-button icon pressed tooltip"
+            id="hideStatsButton"
+            draggable="false"
+            data-tooltip='Show/Hide the "Stats for nerds" panel'
+          />
         </div>
       </div>
 
@@ -122,14 +184,15 @@
       </div>
 
       <button
-        class="icon-and-text"
+        class="icon-and-text tooltip"
         id="calculateButton"
-        title="Compute the final time"
+        data-tooltip="Compute the final time"
       >
         <img
           src="../icons/symbols/manufacturing.svg"
           alt="Calculate"
           class="icon"
+          draggable="false"
         />
         <span class="icon-and-text-label">Calculate</span>
       </button>
@@ -140,13 +203,14 @@
 
         <button
           id="copyButton"
-          class="icon-and-text"
-          title="Copy the mod message to clipboard"
+          class="icon-and-text tooltip"
+          data-tooltip="Copy the mod message to clipboard"
         >
           <img
             src="../icons/symbols/content_copy.svg"
             alt="Copy Mod Message"
             class="icon"
+            draggable="false"
           />
           <span class="icon-and-text-label">Copy</span>
         </button>
@@ -154,5 +218,9 @@
     </div>
 
     <script type="module" src="frame_timer.js"></script>
+
+    <script src="../scripts/popper.min.js"></script>
+    <script src="../scripts/tippy-bundle.umd.min.js"></script>
+    <script src="tooltips.js"></script>
   </body>
 </html>

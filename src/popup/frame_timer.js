@@ -4,11 +4,8 @@ import * as helpers from "./helpers.js";
 document
   .getElementById("autoStartButton")
   .addEventListener("click", async function () {
-    // Set the start time to the current time
-    await helpers.getCurrentTime("start");
-
-    // Update the FPS
-    await helpers.getFPS();
+    // Set the start time to the current time and update the FPS
+    await Promise.all([helpers.getCurrentTime("start"), helpers.getFPS()]);
 
     // Format the time values
     const startTime = document.getElementById("startTime");
@@ -20,11 +17,8 @@ document
 document
   .getElementById("autoEndButton")
   .addEventListener("click", async function () {
-    // Set the end time to the current time
-    await helpers.getCurrentTime("end");
-
-    // Update the FPS
-    await helpers.getFPS();
+    // Set the end time to the current time and update the FPS
+    await Promise.all([helpers.getCurrentTime("end"), helpers.getFPS()]);
 
     const startTime = document.getElementById("startTime");
     const endTime = document.getElementById("endTime");
@@ -41,6 +35,57 @@ document
     const endTime = document.getElementById("endTime");
     startTime.value = helpers.parseTime(startTime.value);
     endTime.value = helpers.parseTime(endTime.value);
+  });
+
+// Event listener for the toggle stats button
+document
+  .getElementById("hideStatsButton")
+  .addEventListener("click", function () {
+    const toggled = this.matches(".pressed");
+    helpers.toggleHideStatsButton(toggled);
+  });
+
+// Event listener for the go to time buttons
+document
+  .getElementById("jumpToEndTimeButton")
+  .addEventListener("click", async () => {
+    // Get the end time input element
+    const endTime = document.getElementById("endTime");
+
+    // Try to parse the input as a float
+    let time;
+    try {
+      time = parseFloat(endTime.value);
+    } catch {
+      // Show a place holder error message (just in case the checkValues fails)
+      helpers.showError(endTime, "Invalid input");
+
+      // Check the values
+      helpers.checkValues();
+    }
+    // Go to the specified time
+    await helpers.jumpToTime(time);
+  });
+
+document
+  .getElementById("jumpToStartTimeButton")
+  .addEventListener("click", async () => {
+    // Get the start time input element
+    const startTime = document.getElementById("startTime");
+
+    // Try to parse the input as a float
+    let time;
+    try {
+      time = parseFloat(startTime.value);
+    } catch {
+      // Show a place holder error message (just in case the checkValues fails)
+      helpers.showError(startTime, "Invalid input");
+
+      // Check the values
+      helpers.checkValues();
+    }
+    // Go to the specified time
+    await helpers.jumpToTime(time);
   });
 
 // Event listener for the calculate button
@@ -100,6 +145,13 @@ document.getElementById("playButton").addEventListener("click", async () => {
   document.getElementById("playButtonIcon").src = videoState.state
     ? "../icons/symbols/play_arrow.svg"
     : "../icons/symbols/pause.svg";
+});
+
+// Event listener for the playback speed dropdown menu
+document.getElementById("playbackRate").addEventListener("change", function () {
+  const value = this.value;
+  helpers.setPlaybackRate(value);
+  helpers.savePopupState();
 });
 
 // Save the popup state when an input field is no longer in focus
@@ -172,6 +224,33 @@ document.addEventListener("keydown", async (event) => {
 });
 
 // Load the saved popup state when the popup is opened
-document.addEventListener("DOMContentLoaded", function () {
-  helpers.loadPopupState();
+document.addEventListener("DOMContentLoaded", async function () {
+  await helpers.loadPopupState();
+  helpers.setPlaybackRate(document.getElementById("playbackRate").value);
 });
+
+// Function to check if the current website is supported
+function checkWebsiteSupported(supportedWebsites) {
+  // Get the current tab hostname
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    let currentTab = tabs[0];
+    if (currentTab) {
+      const url = new URL(currentTab.url);
+      const hostname = url.hostname;
+
+      // Loop through supported websites and check if the current hostname matches
+      for (let website of supportedWebsites) {
+        // Check if the current hostname ends with the supported website
+        if (hostname.endsWith(website)) {
+          return true; // The website is supported
+        }
+      }
+      window.open("not_supported.html", "_self");
+      return false; // The website is not supported
+    }
+  });
+}
+
+// Check if the site we are in is supported
+const supportedWebsites = ["youtube.com"];
+checkWebsiteSupported(supportedWebsites);
