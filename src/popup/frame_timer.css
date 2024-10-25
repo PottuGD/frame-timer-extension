@@ -31,7 +31,7 @@ body {
   align-items: center;
 }
 
-.top-bar a {
+a {
   margin: 0 7px;
   color: #007acc;
 }
