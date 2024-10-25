@@ -1,4 +1,23 @@
-# frame timer extension
+<div align="center">
+  <a href="/images/logo-original.png">
+    <img src="/images/logo-original.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">frame timer extension</h3>
+
+  <p align="center">
+    Quickly calculate the time between 2 frames in a youtube video.
+    <br />
+    <a href="https://github.com/PottuGD/frame-timer-extension/wiki"><strong>Documentation »</strong></a>
+    <br />
+    <br />
+    <a href="https://addons.mozilla.org/en-US/firefox/addon/frame-timer-extension/">Firefox Install</a>
+    ·
+    <a href="https://github.com/PottuGD/frame-timer-extension/wiki/Installation-Guide">Chrome Install</a>
+    ·
+    <a href="https://github.com/PottuGD/frame-timer-extension/issues">Report Bug</a>
+  </p>
+</div>
 
 frame-timer-extension is a browser extension that allows you to quickly and accurately calculate the time between 2 frames in a YouTube video. This tool is made for retiming speedruns. The core function that calculates the times is made by [@slashinfty](https://github.com/slashinfty/yt-frame-timer).
 
@@ -8,7 +27,7 @@ frame-timer-extension is a browser extension that allows you to quickly and accu
 
 The extension can be downloaded for Firefox from the official [Firefox Add-Ons Store](https://addons.mozilla.org/en-US/firefox/addon/frame-timer-extension/).
 
-Chrome users, please check the [installation guide](https://github.com/PottuGD/frame-timer-extension/wiki/Installation-guide).
+Chrome users, please check the [installation guide](https://github.com/PottuGD/frame-timer-extension/wiki/Installation-guide). (Chrome extension is submitted for review and will be available soon.)
 
 ## Documentation
 
