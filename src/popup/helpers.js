@@ -81,7 +81,7 @@ async function loadPopupState() {
       setValue("startTime", "startTime", "");
       setValue("endTime", "endTime", "");
       setValue("frameRate", "frameRate", 60);
-      setValue("stepFramesValue", "stepFramesValue", "");
+      setValue("stepFramesValue", "stepFramesValue", 1);
       setValue("playbackRate", "playbackRate", 1);
 
       if (result["hideStatsChecked"]) {
