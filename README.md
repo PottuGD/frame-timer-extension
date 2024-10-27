@@ -40,15 +40,15 @@ It includes:
 - [Contributing](https://github.com/PottuGD/frame-timer-extension/wiki/Contributing)
 - [Credits](https://github.com/PottuGD/frame-timer-extension/wiki/Credits)
 
-## Building
+## Packaging
 
 To package the extension from source:
 
-Packaging documentation for [Firefox](https://extensionworkshop.com/documentation/publish/package-your-extension/)
-
-For Chrome you'll have to visit `chrome://extensions/` and click on `Pack extension`. Then follow the on screen instructions.
-
-**Important:** Change the `manifest.json` to either [Firefox manifest](/manifests/manifest.firefox.json) or to [Chrome manifest](/manifests/manifest.chrome.json), depending on your browser you are packaging for.
+1. Navigate to the folder called `/src`.
+2. Replace the contents of the file, `manifest.json`, with those from either [manifest.firefox.json](/manifests/manifest.firefox.json) or [manifest.chrome.json](/manifests/manifest.chrome.json).
+3. Zip/archive all the files and folders in the `/src` directory. **Make sure the archiced file has the extension `.zip`.** I recommend [7-Zip](7-zip.org), but you can use any archiving tool of your choice.
+4. (optional) Rename the generated `.zip` file.
+5. Done.
 
 ## TODO:
 
