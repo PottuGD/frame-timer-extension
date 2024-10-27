@@ -58,3 +58,5 @@ To package the extension from source:
 ## Credits
 
 The original [yt-frame-timer](https://github.com/slashinfty/yt-frame-timer/) made by [@slashinfty](https://github.com/slashinfty/)
+
+The tooltips are made with [Tippy.js](https://atomiks.github.io/tippyjs/)
