@@ -13,7 +13,7 @@
     <br />
     <a href="https://addons.mozilla.org/en-US/firefox/addon/frame-timer-extension/">Firefox Install</a>
     ·
-    <a href="https://github.com/PottuGD/frame-timer-extension/wiki/Installation-Guide">Chrome Install</a>
+    <a href="https://chromewebstore.google.com/detail/frame-timer/mdmhlahljnlcbigbbeadccddfbkagecf?pli=1">Chrome Install</a>
     ·
     <a href="https://github.com/PottuGD/frame-timer-extension/issues">Report Bug</a>
   </p>
@@ -27,7 +27,7 @@ frame-timer-extension is a browser extension that allows you to quickly and accu
 
 The extension can be downloaded for Firefox from the official [Firefox Add-Ons Store](https://addons.mozilla.org/en-US/firefox/addon/frame-timer-extension/).
 
-Chrome users, please check the [installation guide](https://github.com/PottuGD/frame-timer-extension/wiki/Installation-guide). (Chrome extension is submitted for review and will be available soon.)
+For Chrome, it can be downloaded from the [Chrome Web Store guide](https://chromewebstore.google.com/detail/frame-timer/mdmhlahljnlcbigbbeadccddfbkagecf?pli=1).
 
 ## Documentation
 
