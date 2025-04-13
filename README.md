@@ -46,9 +46,9 @@ It includes:
 
 To package the extension from source:
 
-1. Navigate to the folder called `/src`.
+1. Navigate to the folder called `src/`.
 2. Replace the contents of the file, `manifest.json`, with those from either [manifest.firefox.json](/manifests/manifest.firefox.json) or [manifest.chrome.json](/manifests/manifest.chrome.json).
-3. Zip/archive all the files and folders in the `/src` directory. **Make sure the archiced file has the extension `.zip`.** I recommend [7-Zip](7-zip.org), but you can use any archiving tool of your choice.
+3. Zip/archive all the files and folders in the `src/` directory. **Make sure the archiced file has the extension `.zip`.** I recommend [7-Zip](7-zip.org), but you can use any archiving tool of your choice.
 4. (optional) Rename the generated `.zip` file.
 5. Done.
 
