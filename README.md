@@ -29,7 +29,7 @@ frame-timer-extension is a browser extension that allows you to quickly and accu
 
 The extension can be downloaded for Firefox from the official [Firefox Add-Ons Store](https://addons.mozilla.org/en-US/firefox/addon/frame-timer-extension/).
 
-For Chrome, it can be downloaded from the [Chrome Web Store guide](https://chromewebstore.google.com/detail/frame-timer/mdmhlahljnlcbigbbeadccddfbkagecf?pli=1).
+For Chrome, it can be downloaded from the [Chrome Web Store](https://chromewebstore.google.com/detail/frame-timer/mdmhlahljnlcbigbbeadccddfbkagecf?pli=1).
 
 ## Documentation
 
